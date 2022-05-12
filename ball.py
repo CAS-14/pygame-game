@@ -17,12 +17,7 @@ current_frame = 0
 
 def switch():
     global current_frame
-
-    if current_frame == 0:
-        current_frame = 1
-    elif current_frame == 1:
-        current_frame = 0
-
+    current_frame = 1 if current_frame == 0 else 0
     return pygame.image.load(animation_frames[current_frame])
 
 while 1:
@@ -38,7 +33,7 @@ while 1:
         speed[1] = -speed[1]
         ball = switch()
 
-    screen.fill(black)
+    screen.fill("#ffffff")
     screen.blit(ball, ballrect)
     pygame.display.flip()
 

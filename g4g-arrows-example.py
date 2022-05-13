@@ -9,26 +9,25 @@ HEIGHT = 500
  
 # Object class
 class Sprite(pygame.sprite.Sprite):
-    def __init__(self, color, height, width):
+    def __init__(self, imageDefault, imageMove = None):
         super().__init__()
-        self.image = pygame.image.load("jimmy1.png")
+        self.imageDefault = pygame.image.load(imageDefault)
+        self.imageMove = pygame.image.load(imageMove) if imageMove else self.imageDefault
+
+        #print(self.imageDefault + self.imageMove)
+
+        self.image = self.imageDefault
         self.rect = self.image.get_rect()
  
-    def moveRight(self, pixels):
-        if self.rect.right < WIDTH:
-            self.rect.x += pixels
- 
-    def moveLeft(self, pixels):
-        if self.rect.left > 0:
-            self.rect.x -= pixels
- 
-    def moveUp(self, pixels):
-        if self.rect.top > 0:
-            self.rect.y -= pixels
- 
-    def moveDown(self, pixels):
-        if self.rect.bottom < HEIGHT:
-            self.rect.y += pixels
+    def move(self, x, y, goofy = False):
+        self.image = self.imageMove
+
+        self.rect.x += x if x > 0 and self.rect.right < WIDTH else -1 if goofy else 0
+        self.rect.x += x if x < 0 and self.rect.left > 0 else -1 if goofy else 0
+        self.rect.y -= y if y > 0 and self.rect.top > 0 else -1 if goofy else 0
+        self.rect.y -= y if y < 0 and self.rect.bottom < HEIGHT else -1 if goofy else 0
+
+        self.image = self.imageDefault
  
  
 pygame.init()
@@ -44,15 +43,16 @@ pygame.display.set_caption("Creating Sprite")
  
 all_sprites_list = pygame.sprite.Group()
  
-playerCar = Sprite(RED, 20, 30)
-playerCar.rect.x = 200
-playerCar.rect.y = 300
+jimmy = Sprite("jimmy1.png", "jimmy2.png")
+jimmy.rect.x = 300
+jimmy.rect.y = 200
  
- 
-all_sprites_list.add(playerCar)
+all_sprites_list.add(jimmy)
  
 exit = True
 clock = pygame.time.Clock()
+
+doGoofy = True
  
 while exit:
     for event in pygame.event.get():
@@ -63,14 +63,19 @@ while exit:
                 exit = False
  
     keys = pygame.key.get_pressed()
+
     if keys[pygame.K_LEFT]:
-        playerCar.moveLeft(10)
+        #jimmy.moveLeft(10)
+        jimmy.move(-10, 0, doGoofy)
     if keys[pygame.K_RIGHT]:
-        playerCar.moveRight(10)
+        #jimmy.moveRight(10)
+        jimmy.move(10, 0, doGoofy)
     if keys[pygame.K_DOWN]:
-        playerCar.moveDown(10)
+        #jimmy.moveDown(10)
+        jimmy.move(0, -10, doGoofy)
     if keys[pygame.K_UP]:
-        playerCar.moveUp(10)
+        #jimmy.moveUp(10)
+        jimmy.move(0, 10, doGoofy)
  
     all_sprites_list.update()
     screen.fill(SURFACE_COLOR)

@@ -1,2 +1,2 @@
-# game
-I don't know what to name this yet.
+# pygame-game
+Continued in CAS-14/game
